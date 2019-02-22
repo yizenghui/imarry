@@ -66,6 +66,22 @@
       this.loadImages();
     }
 
+    onShareAppMessage(res) {
+        return {
+            title: '易增辉&甘霞的婚纱照',
+            path: '/pages/images/index',
+            // imageUrl: this.config.shareimageUrl,
+            success: function(res) {
+                // 转发成功
+                console.log(res)
+            },
+            fail: function(res) {
+                console.log(res)
+                // 转发失败
+            }
+        }
+    }
+
     async loadImages() {
         let images = [
           /* {t:"https://static.wechatrank.com/marry/3.JPG", s:"https://static.wechatrank.com/marry/3.JPG", w:1024, h:682, vh:0},
@@ -134,7 +150,6 @@
           {t:"https://static.wechatrank.com/marry/t/48.JPG", s:"https://static.wechatrank.com/marry/t/48.JPG", w:1024, h:682, vh:0},
           {t:"https://static.wechatrank.com/marry/t/49.JPG", s:"https://static.wechatrank.com/marry/t/49.JPG", w:1024, h:682, vh:0},
         ];
-
 
         let col1 = this.col1;
         let col2 = this.col2;

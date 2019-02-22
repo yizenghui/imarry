@@ -16,21 +16,38 @@
     </view>
   </view>
 
-  <image src='/image/inv.png' class='inv'></image>
+  <!-- <image src='/image/inv.png' class='inv'></image> -->
   <image src='{{bgImg}}' class='cover' mode='aspectFill'></image>
-    <view class='datetime' animation="{{animationData}}">
-      <view class='box'>
+    <view class='datetime'  animation="{{animationData}}">
+      <!-- <view class='box'>
         <view class="name css13610f7ae66601">
           <span class="fl">{{inviteName}}</span>
         </view>
         <view class="date css13610f7ae66601">
-          <view>{{inviteDateOne}}</view>
+          <view style="font-size:18px">谨定于</view>
+          <view style="font-size:18px">2019/3/11(二月初五,周一)</view>
+          <view style="font-size:18px">举办婚礼</view>
+          <view style="font-size:18px">入席时间</view>
+          <view>上午11:30分 下午5:30分</view>
+          <view> <text @tap="markertap('女方:镇隆俊耀村(导航)',22.262638,110.817847)">女方:镇隆俊耀村(导航)</text></view>
+          <view><text @tap="markertap('男方:金塘南土岭(导航)',21.732887,110.797334)">男方:金塘南土岭(导航)</text> </view>
+          <view bindtap="">{{inviteAddress}}</view>
+          <view>恭请您的光临</view>
+        </view>
+      </view> -->
+
+      <!----> <view class='box'>
+        <view class="name css13610f7ae66601">
+          <span class="fl">{{inviteName}}</span>
+        </view>
+        <view class="date css13610f7ae66601">
+          <view data-style="font-size:18px">{{inviteDateOne}}</view>
           <view>{{inviteDateTwo}}</view>
           <view><text @tap="markertap('男方:金塘南土岭(导航)',21.732887,110.797334)">男方:金塘南土岭(导航)</text>   <text  @tap="markertap('女方:镇隆俊耀村(导航)',22.262638,110.817847)">女方:镇隆俊耀村(导航)</text></view>
           <view bindtap="">{{inviteAddress}}</view>
           <view>恭请您的光临</view>
         </view>
-      </view>
+      </view> 
     </view>
 </view>
 
@@ -38,7 +55,7 @@
 
 <script>
   import wepy from 'wepy'
-  var bgImg = '/image/bg.jpg'
+  var bgImg = 'https://static.wechatrank.com/marry/bj.jpg'
   let inviteName = '易增辉&甘霞'
   let inviteDateOne = '谨定于 2019/3/11(二月初五,周一) 举办婚礼'
   let inviteDateTwo = '入席时间 上午11:30分 下午5:30分'
@@ -52,9 +69,9 @@
     }
 
     data = {
-      
+      animationData: {},
       isPlayingMusic: false,
-      music_url: 'http://www.ytmp3.cn/down/49676.mp3',
+      music_url: 'https://static.wechatrank.com/ido.mp3',
      
       inviteName: inviteName,
       inviteDateOne: inviteDateOne,
@@ -80,7 +97,7 @@
           scale: 28
         })
       },
-      play(event) {
+      play() {
         if (this.isPlayingMusic) {
           wepy.pauseBackgroundAudio();
           this.isPlayingMusic = false
@@ -111,9 +128,64 @@
             }
         }
     }
+    onShow(){
+      
+      const animation = wx.createAnimation({
+        duration: 2000,
+        timingFunction: 'ease',
+      })
+
+      this.animation = animation
+
+      // animation.translateY(-145)
+      animation.scale(1.1, 1.1).step()
+
+      this.setData({
+        animationData: animation.export()
+      })
+
+
+      setTimeout(function () {
+      
+      
+      animation.translateY(-20).step()
+
+      this.setData({
+        animationData: animation.export()
+      })
+
+      }.bind(this), 1000)
+
+      // animation.rotate(Math.random() * 10 * 720 - 360).step()
+
+      // this.setData({animation: this.animation.export()})
+      
+      // animation.translateY(-145)
+      // animation.translateY(-20).step()
+
+      // this.setData({
+      //   animationData: animation.export()
+      // })
+      // setTimeout(function () {
+      //   animation.translate(30).step()
+      //   this.setData({
+      //     animationData: animation.export()
+      //   })
+      // }.bind(this), 1000)
+    }
     
     onLoad() {
-     
+      
+      wepy.playBackgroundAudio({
+        dataUrl: this.music_url,
+        title: '',
+        coverImgUrl: ''
+      })
+      this.isPlayingMusic = true
+      this.$apply()
+
+      // setTimeout(function () {
+      // }.bind(this), 2000)
         // var latitude = 21.738777
         // var longitude =  110.803539
         // wx.openLocation({
