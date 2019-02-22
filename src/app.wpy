@@ -1,0 +1,102 @@
+<style lang="less">
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+</style>
+
+<script>
+import wepy from 'wepy'
+import 'wepy-async-function'
+
+
+export default class extends wepy.app {
+  config = {
+    pages: [
+      'pages/guide/index',
+      'pages/images/index',
+      'pages/home/index',
+      'pages/map/index',
+      'pages/contact/index',
+    ],
+    
+    tabBar: {
+    "color": "#7A7E83",
+    "selectedColor": "#d81e06",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+        {
+        "pagePath": 'pages/guide/index',
+        "iconPath": "image/tab/xf.png",
+        "selectedIconPath": "image/tab/xf_h.png",
+        "text": "首页"
+        },
+        {
+        "pagePath": 'pages/images/index',
+        "iconPath": "image/tab/zp.png",
+        "selectedIconPath": "image/tab/zp_h.png",
+        "text": "相册"
+        },
+        {
+        "pagePath": 'pages/contact/index',
+        "iconPath": "image/tab/dh.png",
+        "selectedIconPath": "image/tab/dh_h.png",
+        "text": "联系"
+        }
+    ]
+    },
+
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#d81e06',
+      navigationBarTitleText: 'WeChat',
+      navigationBarTextStyle: 'white'
+    }
+  }
+
+  globalData = {
+    userInfo: null
+  }
+
+  constructor () {
+    super()
+    this.use('promisify')
+    this.use('requestfix')
+  }
+
+  onLaunch() {
+    this.testAsync()
+  }
+
+  sleep (s) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('promise resolved')
+      }, s * 1000)
+    })
+  }
+
+  async testAsync () {
+    const data = await this.sleep(3)
+    console.log('xx',data)
+  }
+
+  getUserInfo(cb) {
+    const that = this
+    if (this.globalData.userInfo) {
+      return this.globalData.userInfo
+    }
+    wepy.getUserInfo({
+      success (res) {
+        that.globalData.userInfo = res.userInfo
+        cb && cb(res.userInfo)
+      }
+    })
+  }
+}
+</script>

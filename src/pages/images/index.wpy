@@ -1,0 +1,200 @@
+<template>
+<view>
+<scroll-view scroll-y="true" style="height:{{scrollH}}px" >
+  <view class="free-WaterfallFlow">
+    <view class="img_item">
+        
+      <view class="flex-wrap"  wx:for="{{col1}}" wx:key="id">
+        <image src="{{item.t}}" @tap="previewImage({{item.s}})" lazy-load="true" style="width:100%;height:{{item.vh}}px"></image>
+      </view>
+    </view>
+    <view class="img_item">
+      <view class="flex-wrap" wx:for="{{col2}}" wx:key="id">
+        <image src="{{item.t}}" @tap="previewImage({{item.s}})" lazy-load="true" style="width:100%;height:{{item.vh}}px"></image>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+</view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  let col1H = 0;
+  let col2H = 0;
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '相册'
+    }
+    components = {
+      
+    }
+
+    data = {
+      scrollH: 0,
+      imgWidth: 0,
+      loadingCount: 0,
+      images: [],
+      arr: [],
+      col1: [],
+      col2: []
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+      previewImage(img) {
+        wepy.previewImage({
+          current: img, // 当前显示图片的http链接
+          urls: this.arr // 需要预览的图片http链接列表
+        })
+      },
+    }
+
+    async onReady () {}
+
+    async onLoad() {
+      let system = await wepy.getSystemInfo();
+      this.imgWidth = system.windowWidth * 0.48;
+      this.scrollH = system.windowHeight;
+      this.loadImages();
+    }
+
+    async loadImages() {
+        let images = [
+          /* {t:"https://static.wechatrank.com/marry/3.JPG", s:"https://static.wechatrank.com/marry/3.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/2.JPG", s:"https://static.wechatrank.com/marry/2.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/1.JPG", s:"https://static.wechatrank.com/marry/1.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/10.JPG", s:"https://static.wechatrank.com/marry/10.JPG", w:1024, h:1538, vh:0},
+          {t:"https://static.wechatrank.com/marry/15.JPG", s:"https://static.wechatrank.com/marry/15.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/4.JPG", s:"https://static.wechatrank.com/marry/4.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/5.jpg", s:"https://static.wechatrank.com/marry/5.jpg", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/6.jpg", s:"https://static.wechatrank.com/marry/6.jpg", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/7.JPG", s:"https://static.wechatrank.com/marry/7.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/8.JPG", s:"https://static.wechatrank.com/marry/8.JPG", w:1024, h:1538, vh:0},
+          {t:"https://static.wechatrank.com/marry/9.JPG", s:"https://static.wechatrank.com/marry/9.JPG", w:1024, h:1538, vh:0},
+          {t:"https://static.wechatrank.com/marry/11.JPG", s:"https://static.wechatrank.com/marry/11.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/12.JPG", s:"https://static.wechatrank.com/marry/12.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/13.JPG", s:"https://static.wechatrank.com/marry/13.JPG", w:1024, h:682, vh:0}
+          */
+
+          {t:"https://static.wechatrank.com/marry/t/1.JPG", s:"https://static.wechatrank.com/marry/t/1.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/2.JPG", s:"https://static.wechatrank.com/marry/t/2.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/3.JPG", s:"https://static.wechatrank.com/marry/t/3.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/4.JPG", s:"https://static.wechatrank.com/marry/t/4.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/5.JPG", s:"https://static.wechatrank.com/marry/t/5.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/6.JPG", s:"https://static.wechatrank.com/marry/t/6.JPG", w:1024, h:1536, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/7.JPG", s:"https://static.wechatrank.com/marry/t/7.JPG", w:1024, h:1536, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/8.JPG", s:"https://static.wechatrank.com/marry/t/8.JPG", w:1024, h:1536, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/9.JPG", s:"https://static.wechatrank.com/marry/t/9.JPG", w:1024, h:1536, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/10.JPG", s:"https://static.wechatrank.com/marry/t/10.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/11.JPG", s:"https://static.wechatrank.com/marry/t/11.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/12.JPG", s:"https://static.wechatrank.com/marry/t/12.JPG", w:1024, h:1536, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/13.JPG", s:"https://static.wechatrank.com/marry/t/13.JPG", w:1024, h:1536, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/14.JPG", s:"https://static.wechatrank.com/marry/t/14.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/15.JPG", s:"https://static.wechatrank.com/marry/t/15.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/16.JPG", s:"https://static.wechatrank.com/marry/t/16.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/17.JPG", s:"https://static.wechatrank.com/marry/t/17.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/18.JPG", s:"https://static.wechatrank.com/marry/t/18.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/19.JPG", s:"https://static.wechatrank.com/marry/t/19.JPG", w:1024, h:1536, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/20.JPG", s:"https://static.wechatrank.com/marry/t/20.JPG", w:1024, h:1536, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/21.JPG", s:"https://static.wechatrank.com/marry/t/21.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/22.JPG", s:"https://static.wechatrank.com/marry/t/22.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/23.JPG", s:"https://static.wechatrank.com/marry/t/23.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/24.JPG", s:"https://static.wechatrank.com/marry/t/24.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/25.JPG", s:"https://static.wechatrank.com/marry/t/25.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/26.JPG", s:"https://static.wechatrank.com/marry/t/26.JPG", w:1024, h:1536, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/27.JPG", s:"https://static.wechatrank.com/marry/t/27.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/28.JPG", s:"https://static.wechatrank.com/marry/t/28.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/29.jpg", s:"https://static.wechatrank.com/marry/t/29.jpg", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/30.jpg", s:"https://static.wechatrank.com/marry/t/30.jpg", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/31.jpg", s:"https://static.wechatrank.com/marry/t/31.jpg", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/32.JPG", s:"https://static.wechatrank.com/marry/t/32.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/33.JPG", s:"https://static.wechatrank.com/marry/t/33.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/34.JPG", s:"https://static.wechatrank.com/marry/t/34.JPG", w:1024, h:1536, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/35.JPG", s:"https://static.wechatrank.com/marry/t/35.JPG", w:1024, h:1536, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/36.JPG", s:"https://static.wechatrank.com/marry/t/36.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/37.JPG", s:"https://static.wechatrank.com/marry/t/37.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/38.JPG", s:"https://static.wechatrank.com/marry/t/38.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/39.JPG", s:"https://static.wechatrank.com/marry/t/39.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/40.JPG", s:"https://static.wechatrank.com/marry/t/40.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/41.JPG", s:"https://static.wechatrank.com/marry/t/41.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/42.JPG", s:"https://static.wechatrank.com/marry/t/42.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/43.JPG", s:"https://static.wechatrank.com/marry/t/43.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/44.JPG", s:"https://static.wechatrank.com/marry/t/44.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/45.JPG", s:"https://static.wechatrank.com/marry/t/45.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/46.JPG", s:"https://static.wechatrank.com/marry/t/46.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/47.JPG", s:"https://static.wechatrank.com/marry/t/47.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/48.JPG", s:"https://static.wechatrank.com/marry/t/48.JPG", w:1024, h:682, vh:0},
+          {t:"https://static.wechatrank.com/marry/t/49.JPG", s:"https://static.wechatrank.com/marry/t/49.JPG", w:1024, h:682, vh:0},
+        ];
+
+
+        let col1 = this.col1;
+        let col2 = this.col2;
+        for (let i = 0; i < images.length; i++) {
+          images[i].vh = images[i].h * ( this.imgWidth / images[i].w ) ;
+          if (col1H <= col2H) {
+              col1H += images[i].vh;
+              col1.push(images[i]);
+          } else {
+              col2H += images[i].vh;
+              col2.push(images[i]);
+          }
+          this.arr.push(images[i].s);
+        }
+        this.col1= col1
+        this.col2= col2
+        this.images = images
+        this.$apply()
+    }
+  }
+</script>
+
+
+<style lang="less">
+
+.img_item {
+  width: 48%;
+  margin: 1%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+
+.free-WaterfallFlow{
+  width:98%;
+}
+.free-WaterfallFlow .flex-wrap{
+  display: inline-block;
+  width:96%;
+  margin-bottom:5px;
+  // border:1px solid #ccc;
+  padding:5px;
+  box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+  text-align: center;
+  padding-bottom:0;
+
+}
+.flex-wrap image{
+  width:96%;
+  margin:0 auto;
+}
+.flex-wrap view:nth-child(2){
+  font-size:15px;
+  padding:1% 0;
+  color:#717171;
+}
+.flex-wrap view:nth-child(3){
+  font-size:13px;
+  padding:1% 0;
+  color:#aaa;
+  text-align: right;
+}
+</style>

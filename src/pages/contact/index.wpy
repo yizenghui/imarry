@@ -1,0 +1,99 @@
+<template>
+<view>
+
+<view class="page">
+        <view class="page__bd">
+            <view class="weui-form-preview">
+                <view class="weui-form-preview__hd">
+                  <view class="weui-form-preview__item">
+                    <view class="weui-form-preview__label">新郎</view>
+                    <view class="weui-form-preview__value_in-hd">易增辉</view>
+                  </view>
+                </view>
+                <view class="weui-form-preview__bd">
+                  <view class="weui-form-preview__item">
+                    <view class="weui-form-preview__label">手机号码</view>
+                    <view class="weui-form-preview__value" @tap="call(13927556121)">13927556121(呼叫)</view>
+                  </view>
+                  <view class="weui-form-preview__item">
+                    <view class="weui-form-preview__label">详细地址</view>
+                    <view class="weui-form-preview__value"  @tap="markertap('男方:金塘南土岭(导航)',21.732887,110.797334)">金塘南土岭(导航)</view>
+                  </view>
+                </view>
+            </view>
+
+            <view class="weui-form-preview" style="margin-top:3rem">
+                <view class="weui-form-preview__hd">
+                  <view class="weui-form-preview__label">新娘</view>
+                  <view class="weui-form-preview__value_in-hd">甘霞</view>
+                </view>
+                <view class="weui-form-preview__bd">
+                  <view class="weui-form-preview__item">
+                    <view class="weui-form-preview__label">手机号码</view>
+                    <view class="weui-form-preview__value" @tap="call(17876597599)">17876597599(呼叫)</view>
+                  </view>
+                  <view class="weui-form-preview__item">
+                    <view class="weui-form-preview__label">详细地址</view>
+                    <view class="weui-form-preview__value" @tap="markertap('女方:镇隆俊耀村(导航)',22.262638,110.817847)">镇隆俊耀村(导航)</view>
+                  </view>
+                </view>
+            </view>
+        </view>
+    </view>
+
+    
+
+</view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '联系方式'
+    }
+    components = {
+      
+    }
+
+
+    data = {
+      
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+      markertap(name,latitude,longitude){
+        wepy.openLocation({
+          latitude: parseFloat(latitude),
+          longitude: parseFloat(longitude),
+          name:name,
+          scale: 28
+        })
+      },
+
+      call(phone){
+        wepy.makePhoneCall({
+          phoneNumber: phone // 仅为示例，并非真实的电话号码
+        })
+      }
+    }
+
+
+    onLoad() {
+    }
+  }
+</script>
+
+
+
+<style lang="less">
+@import '../../style/weui.less';
+</style>

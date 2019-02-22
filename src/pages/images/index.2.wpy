@@ -1,0 +1,239 @@
+<template>
+<view>
+<view style="display:none">
+  <image wx:for="{{images}}" wx:key="id" id="{{item.id}}" src="{{item.thumbnail}}" bindload="onImageLoad"></image>
+</view>
+<scroll-view scroll-y="true" style="height:{{scrollH}}px" bindscrolltolower="loadImages">
+  <view style="width:100%">
+    <view class="img_item">
+      <view wx:for="{{col1}}" wx:key="id">
+        <image src="{{item.thumbnail}}" style="width:100%;height:{{item.height}}px"></image>
+      </view>
+    </view>
+    <view class="img_item">
+      <view wx:for="{{col2}}" wx:key="id">
+        <image src="{{item.thumbnail}}" style="width:100%;height:{{item.height}}px"></image>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+<!-- <view class="flex">
+
+<view class="l">
+  
+      <block>
+        <view class="flex-wrap" wx:for="{{arr1}}" wx:key='{{item.src}}' >
+          <image mode="widthFix" src="{{item.thumbnail}}" @tap="previewImage({{item.src}})"></image>
+        </view>
+      </block>
+</view>
+
+<view class="r">
+    <block>
+      <view class="flex-wrap" wx:for="{{arr2}}" wx:key='{{item.src}}'>
+        <image mode="widthFix" src="{{item.thumbnail}}" @tap="previewImage({{item.src}})"></image>
+      </view>
+    </block>
+</view>
+
+</view> -->
+    <view class="free-WaterfallFlow">
+
+      <!-- <block>
+        <view class="flex-wrap" wx:for="{{images}}" wx:key='{{item.src}}' 
+        wx:if="{{item.id%2!=''}}">
+          <image mode="widthFix" src="{{item.thumbnail}}" @tap="previewImage({{item.src}})"></image>
+        </view>
+      </block>
+      <block>
+        <view class="flex-wrap" wx:for="{{images}}" wx:key='{{item.src}}'
+        wx:if="{{item.id%2==''}}">
+          <image mode="widthFix" src="{{item.thumbnail}}" @tap="previewImage({{item.src}})"></image>
+        </view>
+      </block> -->
+      <!-- <block>
+        <view class="flex-wrap" wx:for="{{arr1}}" wx:key='{{item.src}}' >
+          <image mode="widthFix" src="{{item.thumbnail}}" @tap="previewImage({{item.src}})"></image>
+        </view>
+      </block>
+      <block>
+        <view class="flex-wrap" wx:for="{{arr2}}" wx:key='{{item.src}}'>
+          <image mode="widthFix" src="{{item.thumbnail}}" @tap="previewImage({{item.src}})"></image>
+        </view>
+      </block> -->
+    </view>
+</view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  let col1H = 0;
+  let col2H = 0;
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '相册'
+    }
+    components = {
+      
+    }
+
+    data = {
+      scrollH: 0,
+      imgWidth: 0,
+      loadingCount: 0,
+      images: [],
+      col1: [],
+      col2: []
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+      previewImage(img) {
+        wepy.previewImage({
+          current: img, // 当前显示图片的http链接
+          urls: this.arr // 需要预览的图片http链接列表
+        })
+      },
+    }
+
+    async onImageLoad(e) {
+        let imageId = e.currentTarget.id;
+        let oImgW = e.detail.width;         //图片原始宽度
+        let oImgH = e.detail.height;        //图片原始高度
+        let imgWidth = this.imgWidth;  //图片设置的宽度
+        let scale = imgWidth / oImgW;        //比例计算
+        let imgHeight = oImgH * scale;      //自适应高度
+
+        let images = this.images;
+        let imageObj = null;
+
+        for (let i = 0; i < images.length; i++) {
+            let img = images[i];
+            if (img.id === imageId) {
+                imageObj = img;
+                break;
+            }
+        }
+
+        imageObj.height = imgHeight;
+
+        let loadingCount = this.loadingCount - 1;
+        let col1 = this.col1;
+        let col2 = this.col2;
+
+        if (col1H <= col2H) {
+            col1H += imgHeight;
+            col1.push(imageObj);
+        } else {
+            col2H += imgHeight;
+            col2.push(imageObj);
+        }
+        this.loadingCount= loadingCount
+        this.col1= col1
+        this.col2= col2
+        if (!loadingCount) {
+            this.images = [];
+        }
+        this.$apply()
+
+    }
+    async onReady () {}
+
+    async onLoad() {
+      let system = await wepy.getSystemInfo();
+      this.imgWidth = system.windowWidth * 0.48;
+      this.scrollH = system.windowHeight;
+      this.loadImages();
+    }
+
+    async loadImages() {
+        let images = [
+          {thumbnail:"https://static.wechatrank.com/marry/3.JPG", src:"https://static.wechatrank.com/marry/3.JPG", height:0},
+          {thumbnail:"https://static.wechatrank.com/marry/2.JPG", src:"https://static.wechatrank.com/marry/2.JPG", height:0},
+          {thumbnail:"https://static.wechatrank.com/marry/1.JPG", src:"https://static.wechatrank.com/marry/1.JPG", height:0},
+          {thumbnail:"https://static.wechatrank.com/marry/10.JPG", src:"https://static.wechatrank.com/marry/10.JPG", height:0},
+          {thumbnail:"https://static.wechatrank.com/marry/15.JPG", src:"https://static.wechatrank.com/marry/15.JPG",  height:0},
+          {thumbnail:"https://static.wechatrank.com/marry/4.JPG", src:"https://static.wechatrank.com/marry/4.JPG", height:0},
+          {thumbnail:"https://static.wechatrank.com/marry/5.jpg", src:"https://static.wechatrank.com/marry/5.jpg",  height:0},
+          {thumbnail:"https://static.wechatrank.com/marry/6.jpg",  src:"https://static.wechatrank.com/marry/6.jpg", height:0},
+          {thumbnail:"https://static.wechatrank.com/marry/7.JPG", src:"https://static.wechatrank.com/marry/7.JPG",  height:0},
+          {thumbnail:"https://static.wechatrank.com/marry/8.JPG", src:"https://static.wechatrank.com/marry/8.JPG", height:0},
+          {thumbnail:"https://static.wechatrank.com/marry/9.JPG", src:"https://static.wechatrank.com/marry/9.JPG", height:0},
+          {thumbnail:"https://static.wechatrank.com/marry/11.JPG", src:"https://static.wechatrank.com/marry/11.JPG", height:0},
+          {thumbnail:"https://static.wechatrank.com/marry/12.JPG", src:"https://static.wechatrank.com/marry/12.JPG", height:0},
+          {thumbnail:"https://static.wechatrank.com/marry/13.JPG", src:"https://static.wechatrank.com/marry/13.JPG", height:0}
+        ];
+
+        let baseId = "img-" + (+new Date());
+
+        for (let i = 0; i < images.length; i++) {
+            images[i].id = baseId + "-" + i;
+        }
+
+        this.images = images
+        this.loadingCount  = images.length
+        this.$apply()
+    }
+  }
+</script>
+
+
+<style lang="less">
+
+.img_item {
+  width: 48%;
+  margin: 1%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.flex{
+  display: flex;
+}
+.l{
+  width: 48%;
+  // flex: 1;
+}
+.r{
+  width: 48%;
+  // flex: 1
+}
+
+.free-WaterfallFlow{
+  width:98%;
+  column-count:2;/*column-count 属性规定元素应该被分隔的列数：*/
+}
+.free-WaterfallFlow .flex-wrap{
+  display: inline-block;
+  width:100%;
+  margin-bottom:2%;
+  // border:1px solid #ccc;
+  padding:2%;
+  padding-top:5%;
+  margin-right:2%;
+  box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+  text-align: center;
+}
+.flex-wrap image{
+  width:96%;
+  margin:0 auto;
+}
+.flex-wrap view:nth-child(2){
+  font-size:15px;
+  padding:1% 0;
+  color:#717171;
+}
+.flex-wrap view:nth-child(3){
+  font-size:13px;
+  padding:1% 0;
+  color:#aaa;
+  text-align: right;
+}
+</style>
