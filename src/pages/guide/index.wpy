@@ -43,7 +43,7 @@
         <view class="date css13610f7ae66601">
           <view data-style="font-size:18px">{{inviteDateOne}}</view>
           <view>{{inviteDateTwo}}</view>
-          <view><text @tap="markertap('男方:金塘南土岭(导航)',21.732887,110.797334)">男方:金塘南土岭(导航)</text>   <text  @tap="markertap('女方:镇隆俊耀村(导航)',22.262638,110.817847)">女方:镇隆俊耀村(导航)</text></view>
+          <view><text @tap="markertap('男方:金塘南土岭(导航)',21.732887,110.797334)">男方:金塘南土岭(导航) </text>   <text  @tap="markertap('女方:镇隆俊耀村(导航)',22.262638,110.817847)"> 女方:镇隆俊耀村(导航)</text></view>
           <view bindtap="">{{inviteAddress}}</view>
           <view>恭请您的光临</view>
         </view>
@@ -58,7 +58,7 @@
   var bgImg = 'https://static.wechatrank.com/marry/bj.jpg'
   let inviteName = '易增辉&甘霞'
   let inviteDateOne = '谨定于 2019/3/11(二月初五,周一) 举办婚礼'
-  let inviteDateTwo = '入席时间 上午11:30分 下午5:30分'
+  let inviteDateTwo = '入席时间 11:30 , 17:30'
   let inviteAddress = ' '
   let inviteLongitude = 117.398193
   let inviteLatitude = 37.895525
@@ -182,7 +182,7 @@
         coverImgUrl: ''
       })
       this.isPlayingMusic = true
-      this.$apply()
+      // this.$apply()
 
       // setTimeout(function () {
       // }.bind(this), 2000)
